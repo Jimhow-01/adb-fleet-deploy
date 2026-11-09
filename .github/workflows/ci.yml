@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-and-test:
+    # Windows porque este codigo usa pywin32 / wmi / winreg, que nao existem em Linux.
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Historico completo: o scanner de segredos precisa ver todas as revisoes,
+          # nao apenas o HEAD - o GitHub publica as revisoes.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ matrix.python-version }}"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Syntax check
+        run: python -m compileall -q .
+
+      - name: Tests
+        run: pytest
+
+      - name: Secret scan (gitleaks, todo o historico)
+        # PowerShell: `unzip` nao esta disponivel de forma confiavel no runner Windows.
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri 'https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_windows_x64.zip' -OutFile gl.zip
+          Expand-Archive -Path gl.zip -DestinationPath gltool -Force
+          & ./gltool/gitleaks.exe detect --no-banner --redact --log-opts='--all --pretty=oneline --abbrev-commit'

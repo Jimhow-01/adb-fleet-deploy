@@ -1,0 +1,14 @@
+All rights reserved.
+
+This source is published as a portfolio demonstration of how I approached real
+operational problems. It is NOT offered under an open-source license and may
+NOT be copied, redistributed, sublicensed or used in production.
+
+Parts of this code were written as an employee of a game studio. Any rights in
+that code belong to that employer; nothing here is a claim of ownership over
+third-party or former-employer work, and identifying details of that employer
+(hosts, project names, internal paths, credentials) have been removed or
+replaced with environment variables and placeholders.
+
+You may read it, learn from it and cite it. You may not run it against someone
+else's infrastructure or ship it as a product.

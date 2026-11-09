@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Segredos e estado local (nunca commitar)
+.env
+*.env
+credentials.json
+token.json
+oath.json
+*_credentials.json
+
+# Dados e logs de execucao
+*.log
+*.enc
+disk_space.json
+message_timestamps.json
+svn_repos.json
+emails_filtrados.json
+users_info.json
+
+# SO / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# Artefatos de execucao deste repo
+Build.zip
+*.apk
+
+# Artefatos de teste/lint
+.pytest_cache/
+.ruff_cache/
+tests/__pycache__/

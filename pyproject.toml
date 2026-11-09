@@ -1,0 +1,35 @@
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+extend-exclude = ["__pycache__", ".venv", "build", "dist"]
+
+[tool.ruff.lint]
+# Selecao ampla de regras; as desativadas estao listadas com o motivo real.
+select = ["E", "F", "I", "UP", "B", "C4", "SIM"]
+ignore = [
+    "E501",  # linhas longas: reformatar 657 linhas de script legado geraria diff ruinoso,
+    "E402",  # imports fora do topo: intencional em varios scripts (imports apos setup de sys.path),
+    "E701",  # multiplos statements em uma linha: estilo herdado do codigo original,
+    "E702",  # ponto-e-virgula: idem,
+    "E741",  # nomes ambiguos (l, O): codigo legado, renomear sem teste e arriscado,
+    "E722",  # bare except: 8 ocorrencias em caminhos de monitoramento; corrigir exige decidir o que cada um deveria capturar,
+    "F841",  # variavel nao usada: algumas sao resquicio de logica removida; revisar uma a uma,
+    "SIM102",  # if aninhado: legibilidade nao piora,
+    "SIM105",  # try/except/pass: usado de proposito em caminhos de degradacao,
+    "SIM110",  # loop reimplementando builtin: reescrever sem teste unitario e risco,
+    "SIM115",  # abrir arquivo sem context manager: corrigir exige auditar ordem de fechamento,
+    "SIM118",  # `x in dict.keys()`: redundante mas explicito,
+    "SIM222",  # `or True` em expressoes de sondas de rede: intencional,
+    "UP022",  # substituir sys.stdout/stderr: mudaria comportamento de redirecionamento de log,
+    "B008",  # chamada de funcao em argumento default: padrao FastAPI-like, nao presente de forma perigosa,
+    "B007",  # variavel de loop nao usada,
+    "B90",  # comparacoes de versão
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ['tests']
+addopts = "-q"
